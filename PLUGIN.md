@@ -4,7 +4,6 @@ version: 0.1.0
 author: Jiaming Shan (Stella)
 description: Send messages to Claude Code from anywhere - perfect for callbacks, progress reports, and async notifications
 repository: https://github.com/shanjiaming/send-to-claude-plugin
-installCommand: bash ${CLAUDE_PLUGIN_ROOT}/install.sh
 tags:
   - automation
   - callback
@@ -59,7 +58,15 @@ Add this to your `~/.zshrc` or `~/.bashrc` if it's not already there.
 /plugin install send-to-claude
 ```
 
-The script will be automatically installed during plugin installation.
+Then run this command to complete installation:
+```bash
+bash ~/.claude/plugins/cache/send-to-claude/send-to-claude/0.1.0/install.sh
+```
+
+To uninstall:
+```bash
+bash ~/.claude/plugins/cache/send-to-claude/send-to-claude/0.1.0/uninstall.sh
+```
 
 ## Quick Test
 

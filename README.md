@@ -56,11 +56,17 @@ In Claude Code:
 /plugin install send-to-claude
 ```
 
-The plugin will automatically install the script to `~/.local/bin/`.
+Then run this command to complete installation:
+```bash
+bash ~/.claude/plugins/cache/send-to-claude/send-to-claude/0.1.0/install.sh
+```
 
 Make sure `~/.local/bin` is in your PATH.
 
-To uninstall: run `./uninstall.sh`
+To uninstall:
+```bash
+bash ~/.claude/plugins/cache/send-to-claude/send-to-claude/0.1.0/uninstall.sh
+```
 
 ## Usage
 
