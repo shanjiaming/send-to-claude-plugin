@@ -1,35 +1,91 @@
-# Send to Claude - Flexible Callbacks for Claude Code
+# Send to Claude - Self-Aware Task Completion for Claude Code
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![tmux](https://img.shields.io/badge/tmux-supported-brightgreen.svg)](https://github.com/tmux/tmux)
 [![iTerm2](https://img.shields.io/badge/iTerm2-supported-brightgreen.svg)](https://iterm2.com/)
 
-> Enable smart callbacks and progress notifications for Claude Code
+> Let Claude know when background tasks complete - so it can continue working autonomously
 >
 > **Supports:** tmux and iTerm2 (auto-detected)
 
 ## What Does This Do?
 
-This plugin teaches Claude to automatically notify you during long-running tasks - without you having to check back constantly.
+This plugin lets Claude **know when tasks finish** so it can **continue working automatically** - without you having to come back and tell it.
 
-**Before this plugin:**
-- Run a training script → Wait and check back manually
-- Start experiments → Poll for completion
-- Background tasks → No way to know when they're done
+**The Problem:**
 
-**After this plugin:**
-- Run a training script → **Get notified automatically when it's done**
-- Start experiments → **Claude tells you progress and completion**
-- Background tasks → **Messages appear exactly when you need them**
+You ask Claude to do multi-step work:
+```
+You: "Train this model, then analyze the results and generate a report"
+Claude: Starts training...
+[Training runs in background]
+Claude: "Waiting for training to complete..."
+❌ Claude is stuck - it doesn't know when training finishes
+❌ You have to come back and say "training is done"
+❌ Claude can't continue autonomously
+```
 
-## 🎯 Key Features
+**With This Plugin:**
 
-| Feature | What It Means For You |
-|---------|----------------------|
-| 🔄 **Background Callbacks** | Claude tells you when tasks finish |
-| 📊 **Progress Reports** | Get updates during long-running tasks |
-| ⏰ **Smart Timing** | Notifications appear at the right moments |
-| 🤖 **Zero Manual Work** | Claude handles everything automatically |
+```
+You: "Train this model, then analyze the results and generate a report"
+Claude: Starts training with callback...
+[Training runs in background]
+[Training completes → sends message to Claude]
+✅ Claude wakes up: "Training complete! Starting analysis..."
+✅ Claude continues automatically
+✅ You don't need to come back
+```
+
+## 🎯 Key Benefits
+
+| Before | After |
+|--------|-------|
+| ❌ Claude waits indefinitely | ✅ Claude knows when tasks finish |
+| ❌ You must return to continue | ✅ Claude continues autonomously |
+| ❌ Multi-step workflows break | ✅ Workflows complete automatically |
+| ❌ Can only poll or timeout | ✅ Real callbacks that wake Claude |
+
+## 💡 Real Use Cases
+
+### Autonomous Multi-Step Workflows
+
+```
+You: "Download the dataset, train the model, evaluate it, and email me the results"
+Claude:
+  1. Downloads dataset
+  2. Starts training with callback
+  3. [Training finishes → callback wakes Claude]
+  4. Evaluates automatically
+  5. Emails results
+
+✅ You set it and forget it
+✅ Claude completes all steps autonomously
+```
+
+### Progress-Aware Processing
+
+```
+You: "Process these 1000 files and generate a summary"
+Claude:
+  - Processes in batches
+  - [Every 100 files → callback to Claude]
+  - Claude updates: "Processed 100/1000..."
+  - Claude updates: "Processed 200/1000..."
+  - [Complete → callback]
+  - Claude generates summary automatically
+```
+
+### Conditional Logic
+
+```
+You: "Train the model. If accuracy > 90%, deploy it. Otherwise, try with more data."
+Claude:
+  1. Trains model
+  2. [Training finishes → callback with accuracy]
+  3. Claude checks accuracy
+  4. Claude decides and acts automatically
+```
 
 ## 📦 Installation
 
@@ -52,7 +108,7 @@ In Claude Code:
 /plugin install send-to-claude
 ```
 
-Then run the installation script:
+Then run:
 
 ```bash
 ./install.sh
@@ -60,73 +116,33 @@ Then run the installation script:
 
 ## 🚀 How to Use
 
-Just talk to Claude naturally! The plugin works automatically.
+Just give Claude multi-step tasks. The plugin works automatically.
 
-### Example Conversations
-
-**Training a Model:**
-```
-You: "Train this model on the dataset and let me know when it's done"
-Claude: "I'll set up the training script with progress notifications..."
-[Training starts]
-[10 minutes later - automatic message appears]
-Claude receives: "Training complete! Final accuracy: 94.2%"
-```
-
-**Running Experiments:**
-```
-You: "Run these 5 experiments in the background and report progress"
-Claude: "Starting experiments with progress tracking..."
-[Messages appear as each experiment completes]
-"Experiment 1/5 done"
-"Experiment 2/5 done"
-...
-"All experiments finished!"
-```
-
-**Long Tasks:**
-```
-You: "Process this large dataset and notify me every 100 batches"
-Claude: "Processing with periodic updates..."
-[You continue other work]
-[Updates appear automatically]
-"Progress: 100/500 batches"
-"Progress: 200/500 batches"
-...
-"Processing complete!"
-```
+**Claude will:**
+- Detect when callbacks are needed
+- Add them to scripts automatically
+- Continue working when tasks complete
+- No action needed from you
 
 ## 🧪 Test It
 
-After installation, verify it works:
+After installation:
 
 ```
 You: "Test the callback mechanism"
-Claude: "I've started a test. You'll receive a message in 3 seconds..."
-[3 seconds later]
-Automatic message appears: "✅ Callback test successful!"
+Claude: "Starting test..."
+[3 seconds later - Claude receives callback]
+Claude: "✅ Callback received! The mechanism works."
 ```
-
-## 💡 When Does Claude Use This?
-
-Claude automatically detects when you want notifications based on your requests:
-
-- ✅ "Let me know when..."
-- ✅ "Notify me..."
-- ✅ "Report progress..."
-- ✅ "Run in the background..."
-- ✅ "Tell me when it's done..."
-
-You don't need to know any technical details - just ask naturally!
 
 ## 🔄 Comparison with Background Agents
 
 | Feature | This Plugin | Background Agents |
 |---------|-------------|-------------------|
-| Progress during execution | ✅ Claude can report mid-task | ❌ Only at completion |
-| Flexible timing | ✅ Updates whenever needed | ❌ Fixed at end |
+| Claude continues autonomously | ✅ Yes - Claude knows when tasks finish | ❌ No - waits for user |
+| Mid-task updates | ✅ Claude can track progress | ❌ Only final completion |
+| Multi-step workflows | ✅ Complete automatically | ❌ Break at each step |
 | Works in tmux | ✅ Full support | ⚠️ Limited |
-| User effort | ✅ Zero - completely automatic | ⚠️ Some setup needed |
 
 ## 🛠️ Technical Details (For Developers)
 
@@ -135,43 +151,42 @@ You don't need to know any technical details - just ask naturally!
 
 ### How It Works
 
-1. Claude learns callback patterns from the `background-callback` skill
-2. When you request notifications, Claude embeds callback calls in scripts
-3. Scripts execute and send messages back automatically
-4. Messages appear as if you typed them, waking Claude up
+1. Claude embeds callback calls in scripts automatically
+2. When tasks complete, scripts send messages to Claude's terminal
+3. Messages appear as if you typed them - waking Claude up
+4. Claude sees the message and continues processing
 
-### Supported Terminals
+### What Gets Installed
 
-- **tmux**: Uses `tmux send-keys` with configurable delays
-- **iTerm2**: Uses AppleScript with precise timing
-- Auto-detects via `$TMUX` and `$ITERM_SESSION_ID` environment variables
-
-### Project Structure
-
-```
-send-to-claude-plugin/
-├── PLUGIN.md                      # Plugin metadata
-├── README.md                      # User documentation (this file)
-├── install.sh                     # Installation script
-├── skills/
-│   └── background-callback/
-│       └── SKILL.md              # Teaches Claude when/how to use
-├── scripts/
-│   └── send-to-claude            # Core executable
-└── examples/
-    ├── train-callback.py         # Example for developers
-    └── progress-report.sh        # Example for developers
-```
+- `send-to-claude` script in `~/.local/bin/`
+- `background-callback` skill that teaches Claude when/how to use it
+- Auto-detects tmux or iTerm2 environment
 
 ### For Plugin Developers
 
-See `skills/background-callback/SKILL.md` for implementation details and patterns.
+See `skills/background-callback/SKILL.md` for implementation patterns.
+
+Example from the skill:
+```python
+# Claude automatically adds this to scripts:
+import os
+
+def train():
+    # training code...
+    pass
+
+# Start
+os.system('send-to-claude "Training started"')
+train()
+# Complete
+os.system('send-to-claude "Training finished! Accuracy: 94%"')
+```
+
+When the script finishes, Claude receives the message and can continue working.
 
 </details>
 
 ## 🤝 Contributing
-
-Found a bug or have a feature request?
 
 - 🐛 [Report bugs](https://github.com/shanjiaming/send-to-claude-plugin/issues)
 - 💡 [Request features](https://github.com/shanjiaming/send-to-claude-plugin/issues)
@@ -179,13 +194,13 @@ Found a bug or have a feature request?
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) for details
+MIT License - see [LICENSE](LICENSE)
 
 ## 🙏 Credits
 
 Made with ❤️ by [Stella](https://github.com/shanjiaming)
 
-Built for [Claude Code](https://code.claude.com/) users who want smarter notifications.
+For [Claude Code](https://code.claude.com/) users who want autonomous multi-step workflows.
 
 ---
 
