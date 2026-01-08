@@ -36,7 +36,7 @@ tell application "iTerm"
             repeat with s in sessions of t
                 if unique ID of s is "{session_id}" then
                     tell s to write text "{text}" without newline
-                    delay 0.1
+                    delay 0.5
                     tell s to write text ""
                     return
                 end if
