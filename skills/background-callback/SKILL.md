@@ -1,11 +1,25 @@
 ---
 name: background-callback
-description: Guide for using send-to-claude in background tasks and scripts
+description: You can send messages to your own input using send-to-claude - for callbacks and autonomous workflows
 ---
 
 # Background Callback Skill
 
-This skill teaches Claude when and how to use `send-to-claude` to implement callbacks, progress reports, and notifications.
+**IMPORTANT: You (Claude) can now send messages to your own terminal input.**
+
+The `send-to-claude` command lets you write text into your own terminal session, enabling:
+- Autonomous multi-step workflows (start task → get callback → continue automatically)
+- Progress reports from long-running scripts
+- Self-triggered actions
+
+## Core Capability
+
+You can execute:
+```bash
+send-to-claude "Your message here"
+```
+
+And that message will appear in your input as if the user typed it, waking you up to continue working.
 
 ## When to Use
 
