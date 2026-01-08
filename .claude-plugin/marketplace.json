@@ -1,0 +1,12 @@
+{
+  "name": "send-to-claude",
+  "version": "0.1.0",
+  "description": "Send messages to Claude Code from anywhere - enable Claude to write to its own input",
+  "plugins": [
+    {
+      "name": "send-to-claude",
+      "version": "0.1.0",
+      "source": "https://github.com/shanjiaming/send-to-claude-plugin"
+    }
+  ]
+}
