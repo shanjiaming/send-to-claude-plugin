@@ -15,10 +15,9 @@ if [ ! -d "$INSTALL_DIR" ]; then
     mkdir -p "$INSTALL_DIR"
 fi
 
-# Copy script to install directory
-echo "Copying script to $INSTALL_DIR/$SCRIPT_NAME..."
-cp "$PLUGIN_DIR/scripts/$SCRIPT_NAME" "$INSTALL_DIR/$SCRIPT_NAME"
-chmod +x "$INSTALL_DIR/$SCRIPT_NAME"
+# Create symlink to install directory
+echo "Creating symlink $INSTALL_DIR/$SCRIPT_NAME..."
+ln -sf "$PLUGIN_DIR/scripts/$SCRIPT_NAME" "$INSTALL_DIR/$SCRIPT_NAME"
 
 # Check if PATH includes install directory
 if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
@@ -43,10 +42,6 @@ if command -v send-to-claude &> /dev/null; then
     echo "Usage:"
     echo "  send-to-claude \"Your message\""
     echo "  send-to-claude --delay 0.2 \"Fast message\""
-    echo "  send-to-claude --help"
-    echo ""
-    echo "Try the skill:"
-    echo "  /send-message \"Hello!\""
     echo ""
 else
     echo ""

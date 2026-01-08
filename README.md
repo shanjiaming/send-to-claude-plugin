@@ -48,9 +48,11 @@ In Claude Code:
 /plugin install send-to-claude
 ```
 
-Then run `./install.sh` to install the script to `~/.local/bin/`.
+Then run `./install.sh` to create symlink in `~/.local/bin/`.
 
 Make sure `~/.local/bin` is in your PATH.
+
+To uninstall: run `./uninstall.sh`
 
 ## Usage
 
