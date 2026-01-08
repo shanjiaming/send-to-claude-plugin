@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""
+Send a message to current Claude Code session (simulates user input)
+
+Usage:
+    send-to-claude "message"
+    send-to-claude -t tmux:session:window.pane "message"
+    send-to-claude -t iterm:session_id "message"
+
+Environment variables used for auto-detection:
+    TMUX, ITERM_SESSION_ID
+"""
+
+import sys
+import os
+import subprocess
+import argparse
+import time
+
+
+def send_to_tmux(session, window, pane, text, delay=0.5):
+    """Send text to a tmux pane"""
+    target = f"{session}:{window}.{pane}"
+    # 分两步发送，避免文本和回车冲突
+    subprocess.run(['tmux', 'send-keys', '-t', target, text])
+    time.sleep(delay)  # 等待文本输入完成
+    subprocess.run(['tmux', 'send-keys', '-t', target, 'Enter'])
+
+
+def send_to_iterm(session_id, text):
+    """Send text to an iTerm session"""
+    script = f'''
+tell application "iTerm"
+    repeat with w in windows
+        repeat with t in tabs of w
+            repeat with s in sessions of t
+                if unique ID of s is "{session_id}" then
+                    tell s to write text "{text}" without newline
+                    delay 0.1
+                    tell s to write text ""
+                    return
+                end if
+            end repeat
+        end repeat
+    end repeat
+end tell
+'''
+    subprocess.run(['osascript', '-e', script])
+
+
+def detect_terminal():
+    """Auto-detect current terminal environment"""
+    # Check tmux
+    tmux_env = os.getenv('TMUX')
+    if tmux_env:
+        # TMUX=/tmp/tmux-501/default,12345,0
+        parts = tmux_env.split(',')
+        session = subprocess.check_output(
+            ['tmux', 'display-message', '-p', '#S']
+        ).decode().strip()
+        window = subprocess.check_output(
+            ['tmux', 'display-message', '-p', '#I']
+        ).decode().strip()
+        pane = subprocess.check_output(
+            ['tmux', 'display-message', '-p', '#P']
+        ).decode().strip()
+        return ('tmux', session, window, pane)
+
+    # Check iTerm
+    iterm_id = os.getenv('ITERM_SESSION_ID')
+    if iterm_id:
+        # Extract UUID part (after 'w0t0p0:')
+        session_id = iterm_id.split(':')[-1] if ':' in iterm_id else iterm_id
+        return ('iterm', session_id)
+
+    return None
+
+
+def parse_target(target_str):
+    """Parse target string like 'tmux:session:window.pane' or 'iterm:id'"""
+    parts = target_str.split(':', 1)
+    if len(parts) != 2:
+        raise ValueError(f"Invalid target format: {target_str}")
+
+    term_type, rest = parts
+
+    if term_type == 'tmux':
+        # Format: tmux:session:window.pane
+        session_parts = rest.split(':')
+        if len(session_parts) != 2:
+            raise ValueError(f"Invalid tmux target: {target_str}")
+        session = session_parts[0]
+        window_pane = session_parts[1].split('.')
+        if len(window_pane) != 2:
+            raise ValueError(f"Invalid tmux target: {target_str}")
+        window, pane = window_pane
+        return ('tmux', session, window, pane)
+
+    elif term_type == 'iterm':
+        # Format: iterm:session_id
+        return ('iterm', rest)
+
+    else:
+        raise ValueError(f"Unknown terminal type: {term_type}")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Send message to Claude Code session'
+    )
+    parser.add_argument(
+        'message',
+        help='Message to send'
+    )
+    parser.add_argument(
+        '-t', '--target',
+        help='Target terminal (e.g., tmux:main:0.0 or iterm:xxx)'
+    )
+    parser.add_argument(
+        '-d', '--delay',
+        type=float,
+        default=0.5,
+        help='Delay in seconds between sending text and Enter (default: 0.5)'
+    )
+
+    args = parser.parse_args()
+
+    # Determine target
+    if args.target:
+        target_info = parse_target(args.target)
+    else:
+        target_info = detect_terminal()
+        if not target_info:
+            print("Error: Could not detect terminal environment", file=sys.stderr)
+            print("Use -t to specify target explicitly", file=sys.stderr)
+            sys.exit(1)
+
+    # Send message
+    term_type = target_info[0]
+
+    if term_type == 'tmux':
+        _, session, window, pane = target_info
+        send_to_tmux(session, window, pane, args.message, args.delay)
+        print(f"Sent to tmux:{session}:{window}.{pane}")
+
+    elif term_type == 'iterm':
+        _, session_id = target_info
+        send_to_iterm(session_id, args.message)
+        print(f"Sent to iterm:{session_id}")
+
+
+if __name__ == '__main__':
+    main()
