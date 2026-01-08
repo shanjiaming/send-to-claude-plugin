@@ -1,12 +1,17 @@
 {
-  "name": "send-to-claude",
-  "version": "0.1.0",
-  "description": "Send messages to Claude Code from anywhere - enable Claude to write to its own input",
+  "owner": {
+    "name": "Stella",
+    "url": "https://github.com/shanjiaming"
+  },
   "plugins": [
     {
       "name": "send-to-claude",
       "version": "0.1.0",
-      "source": "https://github.com/shanjiaming/send-to-claude-plugin"
+      "description": "Enable Claude to write to its own input - autonomous multi-step workflows",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/shanjiaming/send-to-claude-plugin"
+      }
     }
   ]
 }
