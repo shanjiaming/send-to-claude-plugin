@@ -56,7 +56,7 @@ In Claude Code:
 /plugin install send-to-claude
 ```
 
-Then run `./install.sh` to create symlink in `~/.local/bin/`.
+The plugin will automatically install the script to `~/.local/bin/`.
 
 Make sure `~/.local/bin` is in your PATH.
 
