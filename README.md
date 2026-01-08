@@ -4,7 +4,9 @@
 [![tmux](https://img.shields.io/badge/tmux-supported-brightgreen.svg)](https://github.com/tmux/tmux)
 [![iTerm2](https://img.shields.io/badge/iTerm2-supported-brightgreen.svg)](https://iterm2.com/)
 
-Let Claude know when background tasks complete - so it can continue working autonomously.
+**Claude can now send messages to its own input to wake itself up.**
+
+This plugin gives Claude the ability to write text into its own terminal session at any time - enabling autonomous multi-step workflows where Claude continues working without waiting for you to return.
 
 ## Requirements
 
