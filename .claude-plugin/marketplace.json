@@ -10,8 +10,8 @@
       "version": "0.1.0",
       "description": "Enable Claude to write to its own input - autonomous multi-step workflows",
       "source": {
-        "source": "github",
-        "repo": "shanjiaming/send-to-claude-plugin"
+        "source": "url",
+        "url": "https://github.com/shanjiaming/send-to-claude-plugin.git"
       }
     }
   ]
