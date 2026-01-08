@@ -50,6 +50,16 @@ Add this to your `~/.zshrc` or `~/.bashrc` if it's not already there.
 
 The plugin will guide you through the setup.
 
+## Quick Test
+
+After installation, test the callback mechanism:
+
+```bash
+(sleep 3 && send-to-claude "✅ Callback works! Message received after 3 seconds.") &
+```
+
+The message will appear automatically after 3 seconds, proving background callbacks work.
+
 ## Usage
 
 ### From Python Scripts

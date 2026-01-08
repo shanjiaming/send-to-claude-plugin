@@ -53,11 +53,15 @@ cd send-to-claude-plugin
 
 ## 🚀 Quick Start
 
-### Test it
+### Test the callback
 
+After installation, test it by running this command (in Claude Code):
+
+```bash
+(sleep 3 && send-to-claude "✅ Callback test successful! Received after 3 seconds.") &
 ```
-/send-message "Hello from the callback!"
-```
+
+You'll see the message appear automatically after 3 seconds, proving the callback works!
 
 ### From Python
 
@@ -186,9 +190,6 @@ send-to-claude-plugin/
 ├── PLUGIN.md              # Plugin metadata
 ├── README.md              # This file
 ├── install.sh             # Installation script
-├── skills/
-│   └── send-message/
-│       └── SKILL.md       # /send-message skill
 ├── scripts/
 │   └── send-to-claude     # Main executable
 └── examples/
@@ -206,8 +207,8 @@ send-to-claude "Test from tmux"
 # Test in iTerm
 send-to-claude "Test from iTerm"
 
-# Test with skill
-/send-message "Test skill"
+# Test background callback
+(sleep 3 && send-to-claude "Callback after 3 seconds") &
 ```
 
 ## 🤝 Contributing
