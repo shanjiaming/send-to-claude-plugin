@@ -6,7 +6,7 @@
 
 **Claude can now send messages to its own input to wake itself up.**
 
-This plugin gives Claude the ability to write text into its own terminal session at any time - enabling autonomous multi-step workflows where Claude continues working without waiting for you to return.
+This plugin enables autonomous multi-step workflows where Claude continues working without waiting for you to return.
 
 ## Requirements
 
@@ -16,37 +16,64 @@ This plugin gives Claude the ability to write text into its own terminal session
 
 The plugin auto-detects your terminal environment.
 
-## What Does This Do?
+---
 
-Claude can now complete multi-step workflows autonomously. When you say:
+## The Problem
 
 ```
-"Train this model, then analyze the results and generate a report"
+You: Train the model, then analyze results and generate a report
+Claude: Starting training...
+[10 minutes later training completes]
+Claude: (silence)
+You: (come back) Is training done?
+Claude: Yes! Starting analysis...
 ```
 
-Claude will:
-1. Start training with embedded callback
-2. Get notified when training finishes
-3. Automatically continue to analysis
-4. You don't need to come back
+Claude doesn't know when background tasks complete. Multi-step workflows break here.
 
-**Before:** Claude waits indefinitely, you must return to continue.
-**After:** Claude knows when tasks finish and continues automatically.
+---
+
+## The Solution
+
+Let Claude send messages to itself:
+
+```python
+# Claude's training script
+import os
+
+train_model()  # Takes 10 minutes
+
+# Wake itself up when done
+os.system('send-to-claude "Training complete! Accuracy: 94%, starting analysis..."')
+```
+
+When the script finishes, **Claude's input receives this message automatically**, Claude wakes up and continues.
+
+**Also enables periodic polling**: Check emails hourly, trigger sleep mechanism every 4 hours, periodic memory consolidation, etc.
+
+---
 
 ## How It Works
 
-When Claude writes scripts or commands, it adds callbacks using `send-to-claude`:
+1. Claude runs in tmux/iTerm2 with environment variables `$TMUX` or `$ITERM_SESSION_ID`
+2. Scripts created by Claude inherit these environment variables
+3. Script calls `send-to-claude` → finds Claude's session via inherited variables
+4. Sends message to Claude's terminal input
 
-```python
-# Claude automatically embeds this in scripts:
-import os
-os.system('send-to-claude "Training complete! Starting analysis..."')
+Technical implementation:
+```bash
+# tmux
+tmux send-keys -t $session:$window.$pane "message"
+sleep 0.5
+tmux send-keys -t $session:$window.$pane "Enter"
+
+# iTerm2
+tell session to write text "message"
+delay 0.5
+tell session to write text ""
 ```
 
-The `send-to-claude` command:
-1. Detects your terminal environment (tmux or iTerm2)
-2. Sends text to Claude's terminal as if you typed it
-3. Wakes Claude up to continue working
+---
 
 ## Installation
 
@@ -68,11 +95,69 @@ To uninstall:
 bash ~/.claude/plugins/cache/send-to-claude/send-to-claude/0.1.0/uninstall.sh
 ```
 
+---
+
 ## Usage
 
-Just give Claude multi-step tasks. Claude will automatically add callbacks and continue working when tasks complete.
+Just give Claude multi-step tasks:
+
+```
+"Train model, then analyze results"
+"Process 1000 files, report progress every 100"
+"Download data, clean it, train, deploy"
+```
+
+Claude automatically adds callbacks to scripts and completes workflows autonomously.
 
 Test it: Tell Claude "Test the callback mechanism"
+
+---
+
+## Comparison with Background Agents
+
+| Feature | send-to-claude | Background Agents |
+|---------|----------------|-------------------|
+| Task completion callback | ✅ | ✅ |
+| Any-time callbacks | ✅ | ❌ Only on completion |
+| Claude continues autonomously | ✅ | ❌ Needs user input |
+| Multi-step automation | ✅ | ❌ User needed per step |
+| Periodic polling | ✅ | ❌ |
+
+---
+
+## Technical Details
+
+**Why not polling?**
+
+Polling occupies session, wastes tokens, blocks other tasks.
+
+Callbacks: Claude releases resources, wakes up precisely when needed, zero consumption while waiting.
+
+**How do environment variables work?**
+
+Unix child processes inherit parent environment variables:
+
+```
+Claude (tmux, has $TMUX)
+  └─ python train.py (inherits $TMUX)
+       └─ os.system('send-to-claude') (inherits $TMUX)
+            └─ Reads $TMUX, finds Claude's session
+```
+
+---
+
+## Summary
+
+This plugin transforms Claude from "passive responder" to "autonomous worker."
+
+After installation:
+- No need to watch progress
+- No need to come back and say "continue"
+- No need to manually chain steps
+
+**Claude can truly work independently.**
+
+---
 
 ## License
 
