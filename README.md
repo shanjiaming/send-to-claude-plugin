@@ -55,8 +55,13 @@ cd send-to-claude-plugin
 
 ### Test the callback
 
-After installation, test it by running this command (in Claude Code):
+After installation, ask Claude to test it:
 
+```
+Test the callback mechanism
+```
+
+Claude will run:
 ```bash
 (sleep 3 && send-to-claude "✅ Callback test successful! Received after 3 seconds.") &
 ```
