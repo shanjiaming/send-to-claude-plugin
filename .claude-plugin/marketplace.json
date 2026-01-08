@@ -1,4 +1,5 @@
 {
+  "name": "send-to-claude",
   "owner": {
     "name": "Stella",
     "url": "https://github.com/shanjiaming"
@@ -8,10 +9,7 @@
       "name": "send-to-claude",
       "version": "0.1.0",
       "description": "Enable Claude to write to its own input - autonomous multi-step workflows",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/shanjiaming/send-to-claude-plugin"
-      }
+      "source": "git+https://github.com/shanjiaming/send-to-claude-plugin"
     }
   ]
 }
