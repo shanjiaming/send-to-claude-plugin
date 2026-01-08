@@ -21,6 +21,15 @@ send-to-claude "Your message here"
 
 And that message will appear in your input as if the user typed it, waking you up to continue working.
 
+**Key mechanism**: When you create scripts (Python/Bash/etc), they inherit your terminal's environment variables (`$TMUX` or `$ITERM_SESSION_ID`). This means:
+1. You write a script with `send-to-claude` calls embedded
+2. The script runs (possibly in background)
+3. When script calls `send-to-claude`, it finds YOUR session via inherited environment variables
+4. Message gets sent back to YOUR input
+5. You wake up and continue working
+
+This enables true autonomous workflows where external programs can call back into you.
+
 ## When to Use
 
 Use `send-to-claude` when the user requests:
