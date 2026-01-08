@@ -1,8 +1,12 @@
 # Send to Claude - Flexible Callbacks for Claude Code
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![tmux](https://img.shields.io/badge/tmux-supported-brightgreen.svg)](https://github.com/tmux/tmux)
+[![iTerm2](https://img.shields.io/badge/iTerm2-supported-brightgreen.svg)](https://iterm2.com/)
 
 > Send messages to Claude Code from anywhere - perfect for callbacks, progress reports, and async notifications
+>
+> **Supports:** tmux and iTerm2 (auto-detected)
 
 ## ✨ Features
 
