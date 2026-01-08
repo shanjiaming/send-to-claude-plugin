@@ -28,6 +28,20 @@ Claude Code's built-in Background Agents can only notify on completion. This plu
 | Self-triggering | ✅ Yes | ❌ No |
 | Works in tmux | ✅ Yes | ⚠️ Limited |
 
+## 🤖 How It Works
+
+Once installed, Claude learns when to use callbacks automatically:
+
+- **You say**: "Run this training script and let me know when it's done"
+- **Claude does**: Creates script with embedded `send-to-claude` calls
+- **You get**: Automatic notifications without manual setup
+
+The `background-callback` skill teaches Claude to:
+- Detect when you want notifications
+- Embed callbacks in scripts automatically
+- Report progress at reasonable intervals
+- Wake you up when tasks complete
+
 ## 📦 Installation
 
 ### Prerequisites
@@ -199,6 +213,9 @@ send-to-claude-plugin/
 ├── PLUGIN.md              # Plugin metadata
 ├── README.md              # This file
 ├── install.sh             # Installation script
+├── skills/
+│   └── background-callback/
+│       └── SKILL.md       # Teaches Claude when/how to use callbacks
 ├── scripts/
 │   └── send-to-claude     # Main executable
 └── examples/

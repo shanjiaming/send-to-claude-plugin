@@ -29,6 +29,16 @@ Claude Code's built-in Background Agents can only notify on completion. This plu
 - ✅ Auto-detects your terminal environment
 - ✅ Configurable delays for reliable message delivery
 
+## How It Works
+
+Once installed, **Claude automatically knows when to use callbacks**:
+
+- **User says**: "Train this model and notify me when done"
+- **Claude does**: Creates training script with embedded `send-to-claude` calls
+- **User gets**: Automatic notifications without manual intervention
+
+The included `background-callback` skill teaches Claude to detect when you want notifications and embed callbacks naturally in the code it writes.
+
 ## Installation
 
 ### Prerequisites
