@@ -6,6 +6,14 @@
 
 Let Claude know when background tasks complete - so it can continue working autonomously.
 
+## Requirements
+
+**Your Claude Code session must run in one of these terminals:**
+- tmux
+- iTerm2
+
+The plugin auto-detects your terminal environment.
+
 ## What Does This Do?
 
 Claude can now complete multi-step workflows autonomously. When you say:
@@ -37,8 +45,6 @@ The `send-to-claude` command:
 1. Detects your terminal environment (tmux or iTerm2)
 2. Sends text to Claude's terminal as if you typed it
 3. Wakes Claude up to continue working
-
-**Supported terminals:** tmux, iTerm2 (auto-detected)
 
 ## Installation
 
